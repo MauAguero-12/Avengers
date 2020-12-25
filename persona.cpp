@@ -9,6 +9,8 @@ Persona::Persona(int id){
     hijos = new ListaPersonas();
     paises = new Lista();
     deportes = new Lista();
+    vidaMuerte = new Lista();
+    vivo = true;
 
     pecados->insert("Lujuria");
     pecados->insert("Gula");
@@ -55,4 +57,21 @@ void Persona::increaseGoodActions(){
     for (int i = 0; i < buenasAcciones->size(); i++){
         buenasAcciones->returnIndex(i)->cantidad += rand() % 101;
     }
+}
+
+void Persona::printPerson(){
+    cout << nombre << " "  << apellido << " " << id << endl;
+    cout << "Fecha de nacimiento: " << diaNacimiento << "/" << mesNacimiento << "/" << fechaNacimiento << endl;
+    cout << "Pais: " << pais << " | " << "Continente: " << continente << endl;
+    cout << "Grupo Etario: " << grupoEtario << endl;
+    if (vivo)
+        cout << "Estado: VIVO" << endl;
+    else
+        cout << "Estado: MUERTO" << endl;
+    buenasAcciones->printList();
+    pecados->printList();
+    deportes->printList();
+    paises->printList();
+    vidaMuerte->printList();
+    cout << "\n" << endl;
 }

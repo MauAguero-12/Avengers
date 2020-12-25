@@ -45,3 +45,15 @@ Nodo * Lista::returnIndex(int n){
     }
     return tmp;
 }
+
+void Lista::printList(){
+    Nodo * tmp = primerNodo;
+    while (tmp != NULL){
+        cout << tmp->dato;
+        if (tmp->siguiente == NULL){
+            cout << "" << endl;
+        } else{
+            cout << " | ";
+        }
+    }
+}

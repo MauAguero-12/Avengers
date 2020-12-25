@@ -15,6 +15,8 @@ struct NodoAcciones;
 class ListaAcciones;
 struct Nodo;
 class Lista;
+struct NodoArbol;
+class Arbol;
 
 class Persona{
 public:
@@ -38,11 +40,14 @@ public:
     Lista * deportes;
     string pais;
     string continente;
+    Lista * vidaMuerte;
+    bool vivo;
     
     Persona(int id);
     bool friendsInCommon(Persona * persona);
     void increaseSins();
     void increaseGoodActions();
+    void printPerson();
 };
 
 struct NodoPersona{
@@ -64,12 +69,15 @@ public:
     void insertSort(Persona * p);
     int size();
     NodoPersona * returnIndex(int n);
+    void insert(Persona * p);
+    bool isInList(Persona * p);
     
 };
 
 class Mundo{
 public:
     ListaPersonas * listaPersonas;
+    Arbol * arbol;
     
     
     Mundo();
@@ -84,8 +92,16 @@ public:
     Lista * generateCountryVisits();
     void generateFriends(Persona * p);
     ListaPersonas * generateKids();
+    void createBirthdates();
     void increaseSins();
     void increaseGoodActions();
+    Persona * findHuman(int id);
+    void printHuman(int id);
+    void printFamily(int id);
+    void printFriendsOfFriends(int id);
+    void findBySport();
+    void stats();
+    void printTree();
     
     
 };
@@ -109,6 +125,7 @@ public:
     void insert(string);
     int size();
     NodoAcciones * returnIndex(int n);
+    void printList();
 
 };
 
@@ -130,7 +147,25 @@ public:
     void insert(string);
     int size();
     Nodo * returnIndex(int n);
+    void printList();
 
+};
+
+struct NodoArbol{
+public:
+    NodoPersona * persona;
+    NodoArbol * NodoIzquierdo;
+    NodoArbol * NodoDerecho;
+
+    NodoArbol();
+    bool hoja();
+};
+
+class Arbol{
+public:
+    NodoArbol * raiz;
+
+    Arbol();
 };
 
 #endif // ESTRUCTURAS_H

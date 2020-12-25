@@ -2,6 +2,7 @@
 
 Mundo::Mundo(){
     listaPersonas = new ListaPersonas();
+    arbol = new Arbol();
 }
 
 int Mundo::generateID(){
@@ -86,6 +87,34 @@ void Mundo::generateFriends(Persona * p){
     p->amigos = listaAmigos;
 }
 
+ListaPersonas * Mundo::generateKids(){
+    return NULL;
+}
+
+void Mundo::createBirthdates(){
+    NodoPersona * tmp = listaPersonas->primerNodo;
+    while (tmp != NULL){
+        Persona * p = tmp->persona;
+        p->fechaNacimiento = rand() % 81 + 1940;
+        p->mesNacimiento = rand() % 12 + 1;
+        if (p->mesNacimiento == 2){
+            if (p->fechaNacimiento % 4 == 0){
+                p->diaNacimiento  = rand() % 29 + 1;
+            } else{
+                p->diaNacimiento  = rand() % 28 + 1;
+            }
+        } else if (p->mesNacimiento == 4 || p->mesNacimiento == 6 || p->mesNacimiento == 9 || p->mesNacimiento == 11){
+            p->diaNacimiento  = rand() % 30 + 1;
+        } else{
+            p->diaNacimiento  = rand() % 31 + 1;
+        }
+        //añadir edad
+        //añadir grupo etario
+        tmp = tmp->siguiente;
+    }
+}
+
+
 void Mundo::increaseSins(){
     NodoPersona * tmp = listaPersonas->primerNodo;
     while(tmp != NULL){
@@ -101,3 +130,75 @@ void Mundo::increaseGoodActions(){
         tmp = tmp->siguiente;
     }
 }
+
+Persona * Mundo::findHuman(int id){
+    NodoArbol * tmpA = arbol->raiz;
+    NodoPersona * persona = tmpA->persona;
+
+    while (!tmpA->hoja()){
+        if (tmpA->persona->persona->id == id){
+            persona = tmpA->persona;
+            break;
+        } else if (tmpA->persona->persona->id >= id){
+            tmpA = tmpA->NodoDerecho;
+            if (tmpA->hoja()){
+                persona = tmpA->persona;
+            }
+        } else{
+            tmpA = tmpA->NodoIzquierdo;
+            if (tmpA->hoja()){
+                persona = tmpA->persona;
+            }
+        }
+    }
+
+    if (persona->persona->id < id){
+        while (persona->persona->id < id){
+            persona = persona->siguiente;
+        }
+    } else if (persona->persona->id > id){
+        while (persona->persona->id > id){
+            persona = persona->anterior;
+        }
+    }
+
+    if (persona->persona->id == id){
+        return persona->persona;
+    } else{
+        return NULL;
+    }
+
+}
+
+void Mundo::printHuman(int id){
+    Persona * p = findHuman(id);
+    p->printPerson();
+}
+
+void Mundo::printFamily(int id){
+    Persona * p = findHuman(id);
+    if (p != NULL){
+        if (p->conyuge != NULL){
+            cout << "CONYUGE\n" << endl;
+            p->conyuge->printPerson();
+        }
+        if (p->hijos->size() != 0){
+            cout << "HIJOS\n" << endl;
+        }
+        for (int i = 0; i < p->hijos->size(); i++){
+            p->hijos->returnIndex(i)->persona->printPerson();
+        }
+    }
+}
+
+/*void Mundo::printFriendsOfFriends(int id){
+    Persona * p = findHuman(id);
+    if (p != NULL){
+        ListaPersonas * lista = new ListaPersonas();
+        for (int i = 0; i < p->amigos->size(); i++){
+            for (int j = 0; p->amigos->returnIndex(i)->persona->amigos->size(); i++){
+
+            }
+        }
+    }
+}*/

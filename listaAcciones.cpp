@@ -46,3 +46,15 @@ NodoAcciones * ListaAcciones::returnIndex(int n){
     }
     return tmp;
 }
+
+void ListaAcciones::printList(){
+    NodoAcciones * tmp = primerNodo;
+    while (tmp != NULL){
+        cout << tmp->dato << ": " << tmp->cantidad;
+        if (tmp->siguiente == NULL){
+            cout << "" << endl;
+        } else{
+            cout << ", ";
+        }
+    }
+}
