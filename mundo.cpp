@@ -191,14 +191,31 @@ void Mundo::printFamily(int id){
     }
 }
 
-/*void Mundo::printFriendsOfFriends(int id){
+void Mundo::printFriendsOfFriends(int id){
     Persona * p = findHuman(id);
     if (p != NULL){
         ListaPersonas * lista = new ListaPersonas();
         for (int i = 0; i < p->amigos->size(); i++){
-            for (int j = 0; p->amigos->returnIndex(i)->persona->amigos->size(); i++){
-
+            NodoPersona * amigo = p->amigos->returnIndex(i);
+            ListaPersonas * amigosDeAmigo = amigo->persona->amigos;
+            for (int j = 0; amigosDeAmigo->size(); i++){
+                NodoPersona * amigoDeAmigo = amigosDeAmigo->returnIndex(j);
+                lista->insert(amigoDeAmigo->persona);
             }
         }
+
+        for(int i = 0; i < lista->size(); i++){
+            lista->returnIndex(i)->persona->printPerson();
+        }
     }
-}*/
+}
+
+void Mundo::printBySport(string deporte){
+    NodoPersona * nodo = listaPersonas->primerNodo;
+    while(nodo != NULL){
+        if(nodo->persona->sport(deporte)){
+            nodo->persona->printPerson();
+        }
+        nodo = nodo->siguiente;
+    }
+}

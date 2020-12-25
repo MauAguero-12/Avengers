@@ -75,3 +75,12 @@ void Persona::printPerson(){
     vidaMuerte->printList();
     cout << "\n" << endl;
 }
+
+bool Persona::sport(string deporte){
+    for (int i = 0; i < deportes->size(); i++){
+        if (deportes->returnIndex(i)->dato == deporte){
+            return true;
+        }
+    }
+    return false;
+}

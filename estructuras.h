@@ -48,6 +48,7 @@ public:
     void increaseSins();
     void increaseGoodActions();
     void printPerson();
+    bool sport(string deporte);
 };
 
 struct NodoPersona{
@@ -99,7 +100,7 @@ public:
     void printHuman(int id);
     void printFamily(int id);
     void printFriendsOfFriends(int id);
-    void findBySport();
+    void printBySport(string deporte);
     void stats();
     void printTree();
     

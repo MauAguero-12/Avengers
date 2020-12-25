@@ -59,7 +59,7 @@ NodoPersona * ListaPersonas::returnIndex(int n){
     for (int i = 0; i < n; i++){
         tmp = tmp->siguiente;
     }
-    return new NodoPersona(tmp->persona);
+    return tmp;
 }
 
 void ListaPersonas::insert(Persona *p){
