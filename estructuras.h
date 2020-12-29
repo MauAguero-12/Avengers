@@ -127,6 +127,18 @@ public:
     void stats();
     void printTree();//falta
     bool validateSon(Persona * padre, Persona * hijo);
+
+    void CorvusGlaive();
+    void Midnight();
+    void Nebula();
+    void EbonyMaw();
+    void BlackDwarf();
+    void Thanos();
+
+    void AntMan();
+    void Ironman();
+    void Thor();
+    void Spiderman();
     
     
 };
