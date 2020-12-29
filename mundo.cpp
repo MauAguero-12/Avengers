@@ -5,6 +5,40 @@ Mundo::Mundo(){
     arbol = new Arbol();
 }
 
+void Mundo::generateHumans(int cant){
+    for (int i = 0; i < cant; i++){
+        Persona * p = new Persona(generateID());
+        p->nombre = generateName();
+        p->apellido = generateSurname();
+        p->genero = generateGender();
+        p->pais = generateCountry();
+        p->continente = generateContinent();
+        p->paises = generateCountryVisits();
+        p->estadoMarital = generateMaritalState(p);
+        p->ejercicio = rand() % 8;
+        p->deportes = generateSports(p);
+        p->religion = generateReligion();
+        p->profesion = generateJob();
+    }
+
+    createBirthdates();
+    increaseGoodActions();
+    increaseSins();
+
+    for (int i = 0; i < cant; i++){
+        Persona * p = listaPersonas->returnIndex(i)->persona;
+        generateFriends(p);
+        generateCouple(p);
+
+    }
+
+    for (int i = 0; i < cant; i++){
+        Persona * p = listaPersonas->returnIndex(i)->persona;
+        generateKids(p);
+    }
+
+}
+
 int Mundo::generateID(){
     bool unique = true;
     int id;
@@ -87,8 +121,71 @@ void Mundo::generateFriends(Persona * p){
     p->amigos = listaAmigos;
 }
 
-ListaPersonas * Mundo::generateKids(){
+void Mundo::generateCouple(Persona *p){
+    NodoPersona * nodo = listaPersonas->primerNodo;
+    while(nodo != NULL){
+        Persona * pConyuge = nodo->persona;
+        if (pConyuge->grupoEtario == p->grupoEtario){
+            if (pConyuge->genero != p->genero){
+                if (pConyuge->estadoMarital != "Soltero" || !pConyuge->parejaAsignada){
+                    p->conyuge = nodo->persona;
+                    nodo->persona->conyuge = p;
+                    p->parejaAsignada = true;
+                    nodo->persona->parejaAsignada = true;
+                    break;
+                }
+            }
+        }
+        nodo = nodo->siguiente;
+    }
+    if (nodo == NULL){
+        p->parejaAsignada = true;
+        p->estadoMarital = "Soltero";
+        p->hijosAsignados = true;
+    }
+}
+
+Lista * Mundo::generateCountryVisits(){
+    int cantPaises;
+    int n = rand()%100;
+    if (n < 30){
+        cantPaises = rand()%3;
+    } else if (n < 55){
+        cantPaises = rand()%9 + 2;
+    } else if (n < 75){
+        cantPaises = rand()%6 + 10;
+    } else if (n < 90){
+        cantPaises = rand()%10 + 16;
+    } else{
+        cantPaises = rand()%11 + 25;
+    }
+    cout << cantPaises << endl;//borrar
     return NULL;
+}
+
+Lista * Mundo::generateSports(Persona *p){
+    cout<< p->ejercicio << endl;//borrar
+    return NULL;
+}
+
+void Mundo::generateKids(Persona *p){
+    if (!p->hijosAsignados){
+        ListaPersonas * lista = new ListaPersonas();
+        NodoPersona * nodo = listaPersonas->primerNodo;
+        int cantHijos = rand()%5;
+        while(cantHijos != 0 && nodo != NULL){
+            Persona * pHijo = nodo->persona;
+            if (pHijo->apellido == p->apellido || pHijo->apellido == p->conyuge->apellido){
+                if (pHijo->pais == p->pais || pHijo->pais == p->conyuge->pais){
+                    if (validateSon(p, pHijo)){
+                        lista->insert(pHijo);
+                        cantHijos--;
+                    }
+                }
+            }
+            nodo = nodo->siguiente;
+        }
+    }
 }
 
 void Mundo::createBirthdates(){
@@ -109,7 +206,7 @@ void Mundo::createBirthdates(){
             p->diaNacimiento  = rand() % 31 + 1;
         }
         //añadir edad
-        //añadir grupo etario
+        p->assignAgeGroup();
         tmp = tmp->siguiente;
     }
 }
@@ -218,4 +315,58 @@ void Mundo::printBySport(string deporte){
         }
         nodo = nodo->siguiente;
     }
+}
+
+string Mundo::generateMaritalState(Persona *p){
+    int n = rand() % 100;
+    if (n < 10){
+        p->hijosAsignados = true;
+        p->parejaAsignada = true;
+        return "Soltero";
+    } if (n < 90){
+        return "Casado";
+    } else{
+        return "Divorciado";
+    }
+}
+
+bool Mundo::validateSon(Persona *padre, Persona *hijo){
+    if (padre->grupoEtario == "Joven"){
+        if (hijo->grupoEtario == "Infantil" || hijo->grupoEtario == "Pre-escolar"){
+            return true;
+        }
+    } else if (padre->grupoEtario == "Adulto Joven"){
+        if (hijo->grupoEtario == "Infantil" || hijo->grupoEtario == "Pre-escolar" || hijo->grupoEtario == "Escolar" || hijo->grupoEtario == "Pubertad"){
+            return true;
+        }
+    } else if(padre->grupoEtario == "Adulto Maduro"){
+        if (hijo->grupoEtario == "Adolescencia" || hijo->grupoEtario == "Joven" || hijo->grupoEtario == "Adulto Joven"){
+            return true;
+        }
+    } else if (padre->grupoEtario == "Adulto Mayor"){
+        if (hijo->grupoEtario == "Adulto Joven" || hijo->grupoEtario == "Adulto Maduro"){
+            return true;
+        }
+    }
+    return false;
+}
+
+void Mundo::stats(){
+    NodoPersona * nodo = listaPersonas->primerNodo;
+    int vivos = 0;
+    int muertos = 0;
+    int salvados = 0;
+    while (nodo != NULL){
+        if (nodo->persona->vivo){
+            vivos++;
+            if(nodo->persona->vidaMuerte->size() != 0){
+                salvados++;
+            }
+        } else{
+            muertos++;
+        }
+    }
+    cout << "Personas Vivas: " << vivos << endl;
+    cout << "Personas Muertas: " << muertos << endl;
+    cout << "Personas salvadas: " << salvados << endl;
 }

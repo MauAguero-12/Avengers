@@ -24,24 +24,37 @@ public:
     string nombre;
     string apellido;
     string genero;
+    string profesion;
+    string pais;
+    string continente;
+    string religion;
+
     int fechaNacimiento;
     int mesNacimiento;
     int diaNacimiento;
     string grupoEtario;
+    int edad;
+
     ListaAcciones * pecados;
     ListaAcciones * buenasAcciones;
-    int edad;
+
     Lista * paises;
+
     ListaPersonas * amigos;
+
     string estadoMarital;
-    ListaPersonas * hijos;
     Persona * conyuge;
+    ListaPersonas * hijos;
+
     int ejercicio;
     Lista * deportes;
-    string pais;
-    string continente;
+
     Lista * vidaMuerte;
     bool vivo;
+
+    bool parejaAsignada;
+    bool hijosAsignados;
+    bool hijo;
     
     Persona(int id);
     bool friendsInCommon(Persona * persona);
@@ -49,6 +62,7 @@ public:
     void increaseGoodActions();
     void printPerson();
     bool sport(string deporte);
+    void assignAgeGroup();
 };
 
 struct NodoPersona{
@@ -80,29 +94,39 @@ public:
     ListaPersonas * listaPersonas;
     Arbol * arbol;
     
-    
     Mundo();
+    void generateHumans(int cant);
+
     int generateID();
-    string generateName();
-    string generateSurname();
+    string generateName();//cargar archivo
+    string generateSurname();//cargar archivo
     string generateGender();
-    string generateCountry();
-    string generateContinent();
-    string generateReligion();
-    string generateJob();
-    Lista * generateCountryVisits();
-    void generateFriends(Persona * p);
-    ListaPersonas * generateKids();
-    void createBirthdates();
+    string generateCountry();//cargar archivo
+    string generateContinent();//cargar archivo
+    string generateReligion();//cargar archivo
+    string generateJob();//cargar archivo
+    string generateMaritalState(Persona * p);
+    void createBirthdates();//añadir edad
+
     void increaseSins();
     void increaseGoodActions();
+
+    Lista * generateCountryVisits();//cargar archivo
+    Lista * generateSports(Persona *p);//cargar archivo
+    void generateKids(Persona *p);
+    void generateFriends(Persona * p);
+    void generateCouple(Persona * p);
+
+    void generateTree();//falta
+
     Persona * findHuman(int id);
     void printHuman(int id);
     void printFamily(int id);
     void printFriendsOfFriends(int id);
     void printBySport(string deporte);
     void stats();
-    void printTree();
+    void printTree();//falta
+    bool validateSon(Persona * padre, Persona * hijo);
     
     
 };

@@ -11,6 +11,9 @@ Persona::Persona(int id){
     deportes = new Lista();
     vidaMuerte = new Lista();
     vivo = true;
+    parejaAsignada = false;
+    hijosAsignados = false;
+    hijo = false;
 
     pecados->insert("Lujuria");
     pecados->insert("Gula");
@@ -83,4 +86,26 @@ bool Persona::sport(string deporte){
         }
     }
     return false;
+}
+
+void Persona::assignAgeGroup(){
+    if (edad < 2){
+        grupoEtario = "Infantil";
+    }else if (edad < 5){
+        grupoEtario = "Pre-escolar";
+    }else if (edad < 11){
+        grupoEtario = "Escolar";
+    }else if (edad < 15){
+        grupoEtario = "Pubertad";
+    }else if (edad < 20){
+        grupoEtario = "Adolescencia";
+    }else if (edad < 25){
+        grupoEtario = "Joven";
+    }else if (edad < 35){
+        grupoEtario = "Adulto Joven";
+    }else if (edad < 65){
+        grupoEtario = "Adulto Maduro";
+    }else{
+        grupoEtario = "Adulto Mayor";
+    }
 }
