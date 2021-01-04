@@ -10,6 +10,8 @@ Persona::Persona(int id){
     paises = new Lista();
     deportes = new Lista();
     vidaMuerte = new Lista();
+    padre = NULL;
+    madre = NULL;
     vivo = true;
     parejaAsignada = false;
     hijosAsignados = false;
@@ -107,5 +109,29 @@ void Persona::assignAgeGroup(){
         grupoEtario = "Adulto Maduro";
     }else{
         grupoEtario = "Adulto Mayor";
+    }
+}
+
+
+void Persona::Ironman(){
+    if (!vivo){
+        vivo = true;
+        vidaMuerte->insert("La persona fue salvada por Ironman");
+    }
+    if (padre != NULL){
+        padre->Ironman();
+    }
+    if (madre != NULL){
+        madre->Ironman();
+    }
+    for (int i = 0; i < hijos->size(); i++){
+        hijos->returnIndex(i)->persona->Ironman();
+    }
+}
+
+void Persona::Thor(){
+    if (!vivo){
+        vivo = true;
+        vidaMuerte->insert("La persona fue salvada por Thor");
     }
 }

@@ -66,9 +66,9 @@ string Mundo::generateSurname(){
 string Mundo::generateGender(){
     int n = rand() % 100;
     if (n < 50)
-        return "hombre";
+        return "Hombre";
     else
-        return "mujer";
+        return "Mujer";
 }
 
 string Mundo::generateCountry(){
@@ -122,26 +122,28 @@ void Mundo::generateFriends(Persona * p){
 }
 
 void Mundo::generateCouple(Persona *p){
-    NodoPersona * nodo = listaPersonas->primerNodo;
-    while(nodo != NULL){
-        Persona * pConyuge = nodo->persona;
-        if (pConyuge->grupoEtario == p->grupoEtario){
-            if (pConyuge->genero != p->genero){
-                if (pConyuge->estadoMarital != "Soltero" || !pConyuge->parejaAsignada){
-                    p->conyuge = nodo->persona;
-                    nodo->persona->conyuge = p;
-                    p->parejaAsignada = true;
-                    nodo->persona->parejaAsignada = true;
-                    break;
+    if (p->estadoMarital != "Soltero"){
+        NodoPersona * nodo = listaPersonas->primerNodo;
+        while(nodo != NULL){
+            Persona * pConyuge = nodo->persona;
+            if (pConyuge->grupoEtario == p->grupoEtario){
+                if (pConyuge->genero != p->genero){
+                    if (pConyuge->estadoMarital != "Soltero" && !pConyuge->parejaAsignada){
+                        p->conyuge = pConyuge;
+                        pConyuge->conyuge = p;
+                        p->parejaAsignada = true;
+                        pConyuge->parejaAsignada = true;
+                        break;
+                    }
                 }
             }
+            nodo = nodo->siguiente;
         }
-        nodo = nodo->siguiente;
-    }
-    if (nodo == NULL){
-        p->parejaAsignada = true;
-        p->estadoMarital = "Soltero";
-        p->hijosAsignados = true;
+        if (nodo == NULL){
+            p->parejaAsignada = true;
+            p->estadoMarital = "Soltero";
+            p->hijosAsignados = true;
+        }
     }
 }
 
@@ -179,12 +181,21 @@ void Mundo::generateKids(Persona *p){
                 if (pHijo->pais == p->pais || pHijo->pais == p->conyuge->pais){
                     if (validateSon(p, pHijo)){
                         lista->insert(pHijo);
+                        if (p->genero == "Hombre"){
+                            pHijo->padre = p;
+                            pHijo->madre = p->conyuge;
+                        } else{
+                            pHijo->padre = p->conyuge;
+                            pHijo->madre = p;
+                        }
                         cantHijos--;
                     }
                 }
             }
             nodo = nodo->siguiente;
         }
+        p->hijos = lista;
+        p->conyuge->hijos = lista;
     }
 }
 
@@ -369,4 +380,38 @@ void Mundo::stats(){
     cout << "Personas Vivas: " << vivos << endl;
     cout << "Personas Muertas: " << muertos << endl;
     cout << "Personas salvadas: " << salvados << endl;
+}
+
+void Mundo::Ironman(){
+    ListaPersonas * lista = arbol->toList();
+    int p = rand()%21 + 40;
+    for (int i = 0; i < lista->size(); i++){
+        int n = rand()%100;
+        if (n < p){
+            lista->returnIndex(i)->persona->Ironman();
+        }
+    }
+}
+
+void Mundo::Thor(){
+    int n = rand() % arbol->size() + 1;
+    ListaPersonas * lista = arbol->levelToList(n);
+    for (int i = 0; i < lista->size(); i++){
+        Persona * p = lista->returnIndex(i)->persona;
+        if (p->padre != NULL){
+            ListaPersonas * padre = p->padre->amigos;
+            for (int j = 0; j < padre->size(); j++){
+                padre->returnIndex(j)->persona->Thor();
+            }
+        }
+        if (p->madre != NULL){
+            ListaPersonas * madre = p->madre->amigos;
+            for (int j = 0; j < madre->size(); j++){
+                madre->returnIndex(j)->persona->Thor();
+            }
+        }
+        for (int j = 0; j < p->amigos->size(); j++){
+            p->amigos->returnIndex(j)->persona->Thor();
+        }
+    }
 }

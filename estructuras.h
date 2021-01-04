@@ -43,6 +43,8 @@ public:
     ListaPersonas * amigos;
 
     string estadoMarital;
+    Persona * padre;
+    Persona * madre;
     Persona * conyuge;
     ListaPersonas * hijos;
 
@@ -63,6 +65,9 @@ public:
     void printPerson();
     bool sport(string deporte);
     void assignAgeGroup();
+
+    void Ironman();
+    void Thor();
 };
 
 struct NodoPersona{
@@ -139,8 +144,6 @@ public:
     void Ironman();
     void Thor();
     void Spiderman();
-    
-    
 };
 
 struct NodoAcciones{
@@ -203,6 +206,13 @@ public:
     NodoArbol * raiz;
 
     Arbol();
+    ListaPersonas * toList();
+    ListaPersonas * levelToList(int n);
+    int size();
+
+private:
+    void addAllToList(NodoArbol * p, ListaPersonas * lista);
+    void addLevelToList(NodoArbol * p, ListaPersonas * lista, int nivel);
 };
 
 #endif // ESTRUCTURAS_H
