@@ -12,10 +12,13 @@ Persona::Persona(int id){
     vidaMuerte = new Lista();
     padre = NULL;
     madre = NULL;
+    conyuge = NULL;
     vivo = true;
     parejaAsignada = false;
     hijosAsignados = false;
     hijo = false;
+    cantPecados = 0;
+    cantBuenasAcciones = 0;
 
     pecados->insert("Lujuria");
     pecados->insert("Gula");
@@ -54,13 +57,17 @@ bool Persona::friendsInCommon(Persona *persona){
 
 void Persona::increaseSins(){
     for (int i = 0; i < pecados->size(); i++){
-        pecados->returnIndex(i)->cantidad += rand() % 101;
+        int n = rand() % 101;
+        pecados->returnIndex(i)->cantidad += n;
+        cantPecados += n;
     }
 }
 
 void Persona::increaseGoodActions(){
     for (int i = 0; i < buenasAcciones->size(); i++){
-        buenasAcciones->returnIndex(i)->cantidad += rand() % 101;
+        int n = rand() % 101;
+        buenasAcciones->returnIndex(i)->cantidad += n;
+        cantBuenasAcciones += n;
     }
 }
 
@@ -69,13 +76,17 @@ void Persona::printPerson(){
     cout << "Fecha de nacimiento: " << diaNacimiento << "/" << mesNacimiento << "/" << fechaNacimiento << endl;
     cout << "Pais: " << pais << " | " << "Continente: " << continente << endl;
     cout << "Grupo Etario: " << grupoEtario << endl;
+    cout << "Genero: " << genero << endl;
+    cout << "Estado Civil: " << estadoMarital << endl;
     if (vivo)
         cout << "Estado: VIVO" << endl;
     else
         cout << "Estado: MUERTO" << endl;
     buenasAcciones->printList();
     pecados->printList();
+    cout << "Deportes: ";
     deportes->printList();
+    cout << "Paises visitados: ";
     paises->printList();
     vidaMuerte->printList();
     cout << "\n" << endl;
@@ -88,6 +99,19 @@ bool Persona::sport(string deporte){
         }
     }
     return false;
+}
+
+void Persona::generateAge(int a, int m, int d){
+
+    int edad = a - fechaNacimiento;
+    if (mesNacimiento > m){
+        edad--;
+    } else if (mesNacimiento == m){
+        if (diaNacimiento > d){
+            edad--;
+        }
+    }
+    this->edad = edad;
 }
 
 void Persona::assignAgeGroup(){
@@ -112,6 +136,19 @@ void Persona::assignAgeGroup(){
     }
 }
 
+void Persona::CorvusGlaive(){
+    if (vivo){
+        vivo = false;
+        vidaMuerte->insert("La persona fue eliminada por Corvus Glaive");
+    }
+}
+
+void Persona::Midnight(){
+    if (vivo){
+        vivo = false;
+        vidaMuerte->insert("La persona fue eliminada por Midnight");
+    }
+}
 
 void Persona::Ironman(){
     if (!vivo){

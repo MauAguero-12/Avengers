@@ -38,7 +38,7 @@ void ListaPersonas::insertSort(Persona *p){
             nodo->siguiente = tmp;
             tmp->anterior = nodo;
         }
-        }
+    }
 }
 
 int ListaPersonas::size(){
@@ -85,4 +85,94 @@ bool ListaPersonas::isInList(Persona *p){
         tmp = tmp->siguiente;
     }
     return false;
+}
+
+
+
+ListaPersonasRestringida::ListaPersonasRestringida(int max){
+    this->max = max;
+    primerNodo = ultimoNodo = NULL;
+}
+
+bool ListaPersonasRestringida::isEmpty(){
+    return primerNodo == NULL;
+}
+
+void ListaPersonasRestringida::insertSortMax(Persona *p){
+    NodoPersona * nodo = new NodoPersona(p);
+    if (primerNodo == NULL){
+        primerNodo = nodo;
+        ultimoNodo = nodo;
+    } else{
+        if (primerNodo->persona->cantPecados > p->cantPecados){
+            nodo->siguiente = primerNodo;
+            primerNodo->anterior = nodo;
+            primerNodo = nodo;
+        } else if (ultimoNodo->persona->cantPecados < p->cantPecados){
+            ultimoNodo->siguiente = nodo;
+            nodo->anterior = ultimoNodo;
+            ultimoNodo = nodo;
+        } else{
+            NodoPersona * tmp = primerNodo;
+            while (tmp->persona->cantPecados < p->cantPecados){
+                tmp = tmp->siguiente;
+            }
+            tmp->anterior->siguiente = nodo;
+            nodo->anterior = tmp->anterior;
+            nodo->siguiente = tmp;
+            tmp->anterior = nodo;
+        }
+    }
+
+    if (size() > max){
+        primerNodo = primerNodo->siguiente;
+        if (primerNodo != NULL){
+            primerNodo->anterior = NULL;
+        }
+    }
+}
+
+
+void ListaPersonasRestringida::insertSortMin(Persona *p){
+    NodoPersona * nodo = new NodoPersona(p);
+    if (primerNodo == NULL){
+        primerNodo = nodo;
+        ultimoNodo = nodo;
+    } else{
+        if (primerNodo->persona->cantBuenasAcciones < p->cantBuenasAcciones){
+            nodo->siguiente = primerNodo;
+            primerNodo->anterior = nodo;
+            primerNodo = nodo;
+        } else if (ultimoNodo->persona->cantBuenasAcciones > p->cantBuenasAcciones){
+            ultimoNodo->siguiente = nodo;
+            nodo->anterior = ultimoNodo;
+            ultimoNodo = nodo;
+        } else{
+            NodoPersona * tmp = primerNodo;
+            while (tmp->persona->cantBuenasAcciones > p->cantBuenasAcciones){
+                tmp = tmp->siguiente;
+            }
+            tmp->anterior->siguiente = nodo;
+            nodo->anterior = tmp->anterior;
+            nodo->siguiente = tmp;
+            tmp->anterior = nodo;
+        }
+    }
+
+    if (size() > max){
+        primerNodo = primerNodo->siguiente;
+        if (primerNodo != NULL){
+            primerNodo->anterior = NULL;
+        }
+    }
+}
+
+int ListaPersonasRestringida::size(){
+    int size = 0;
+    NodoPersona * tmp = primerNodo;
+    while (tmp != NULL){
+        size++;
+        tmp = tmp->siguiente;
+    }
+    return size;
 }

@@ -9,6 +9,7 @@ using namespace std;
 
 class Persona;
 class ListaPersonas;
+class ListaPersonasRestringida;
 struct NodoPersona;
 class Mundo;
 struct NodoAcciones;
@@ -37,6 +38,8 @@ public:
 
     ListaAcciones * pecados;
     ListaAcciones * buenasAcciones;
+    int cantPecados;
+    int cantBuenasAcciones;
 
     Lista * paises;
 
@@ -64,10 +67,20 @@ public:
     void increaseGoodActions();
     void printPerson();
     bool sport(string deporte);
+    void generateAge(int a, int m, int d);
     void assignAgeGroup();
 
+    void CorvusGlaive();
+    void Midnight();
+    void Nebula();
+    void EbonyMaw();
+    void BlackDwarf();
+    void Thanos();
+
+    void AntMan();
     void Ironman();
     void Thor();
+    void Spiderman();
 };
 
 struct NodoPersona{
@@ -94,10 +107,30 @@ public:
     
 };
 
+class ListaPersonasRestringida{
+public:
+    NodoPersona * primerNodo;
+    NodoPersona * ultimoNodo;
+    int max;
+
+    ListaPersonasRestringida(int max);
+    bool isEmpty();
+    void insertSortMax(Persona * p);
+    void insertSortMin(Persona * p);
+    int size();
+    //NodoPersona * returnIndex(int n);
+    //bool isInList(Persona * p);
+
+};
+
 class Mundo{
 public:
     ListaPersonas * listaPersonas;
     Arbol * arbol;
+
+    int year;
+    int mes;
+    int dia;
     
     Mundo();
     void generateHumans(int cant);
@@ -111,10 +144,10 @@ public:
     string generateReligion();//cargar archivo
     string generateJob();//cargar archivo
     string generateMaritalState(Persona * p);
-    void createBirthdates();//añadir edad
+    void createBirthdates(ListaPersonas * lista);
 
-    void increaseSins();
-    void increaseGoodActions();
+    void increaseSins(ListaPersonas * lista);
+    void increaseGoodActions(ListaPersonas * lista);
 
     Lista * generateCountryVisits();//cargar archivo
     Lista * generateSports(Persona *p);//cargar archivo

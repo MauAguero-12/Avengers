@@ -2,11 +2,13 @@
 
 Nodo::Nodo(string dato){
     this->dato = dato;
-    anterior = siguiente = NULL;
+    anterior = NULL;
+    siguiente = NULL;
 }
 
 Lista::Lista(){
-    primerNodo = ultimoNodo = NULL;
+    primerNodo = NULL;
+    ultimoNodo = NULL;
 }
 
 bool Lista::isEmpty(){
@@ -47,10 +49,13 @@ Nodo * Lista::returnIndex(int n){
 }
 
 void Lista::printList(){
-    Nodo * tmp = primerNodo;
-    while (tmp != NULL){
-        cout << tmp->dato;
-        if (tmp->siguiente == NULL){
+    Nodo * nodo = primerNodo;
+    if (nodo == NULL){
+        cout << "" << endl;
+    }
+    while (nodo != NULL){
+        cout << nodo->dato;
+        if (nodo->siguiente == NULL){
             cout << "" << endl;
         } else{
             cout << " | ";

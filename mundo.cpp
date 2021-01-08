@@ -6,6 +6,7 @@ Mundo::Mundo(){
 }
 
 void Mundo::generateHumans(int cant){
+    ListaPersonas * lista = new ListaPersonas();
     for (int i = 0; i < cant; i++){
         Persona * p = new Persona(generateID());
         p->nombre = generateName();
@@ -13,29 +14,45 @@ void Mundo::generateHumans(int cant){
         p->genero = generateGender();
         p->pais = generateCountry();
         p->continente = generateContinent();
-        p->paises = generateCountryVisits();
+        //p->paises = generateCountryVisits();
         p->estadoMarital = generateMaritalState(p);
         p->ejercicio = rand() % 8;
-        p->deportes = generateSports(p);
+        //p->deportes = generateSports(p);
         p->religion = generateReligion();
         p->profesion = generateJob();
+        lista->insert(p);
     }
+    cout << "PRIMERA PARTE" << endl;
 
-    createBirthdates();
-    increaseGoodActions();
-    increaseSins();
+    createBirthdates(lista);
+    increaseGoodActions(lista);
+    increaseSins(lista);
+
+    cout << "SEGUNDA PARTE" << endl;
 
     for (int i = 0; i < cant; i++){
-        Persona * p = listaPersonas->returnIndex(i)->persona;
+        Persona * p = lista->returnIndex(i)->persona;
+        listaPersonas->insertSort(p);
+    }
+
+    cout << "TERCERA PARTE" << endl;
+
+    for (int i = 0; i < cant; i++){
+        Persona * p = lista->returnIndex(i)->persona;
         generateFriends(p);
         generateCouple(p);
 
     }
 
+    cout << "CUARTA PARTE" << endl;
+
     for (int i = 0; i < cant; i++){
-        Persona * p = listaPersonas->returnIndex(i)->persona;
+        Persona * p = lista->returnIndex(i)->persona;
         generateKids(p);
     }
+
+    delete lista;
+    cout << "QUINTA PARTE" << endl;
 
 }
 
@@ -122,13 +139,13 @@ void Mundo::generateFriends(Persona * p){
 }
 
 void Mundo::generateCouple(Persona *p){
-    if (p->estadoMarital != "Soltero"){
+    if (p->estadoMarital != "Soltero" && !p->parejaAsignada){
         NodoPersona * nodo = listaPersonas->primerNodo;
         while(nodo != NULL){
             Persona * pConyuge = nodo->persona;
             if (pConyuge->grupoEtario == p->grupoEtario){
                 if (pConyuge->genero != p->genero){
-                    if (pConyuge->estadoMarital != "Soltero" && !pConyuge->parejaAsignada){
+                    if (pConyuge->estadoMarital == p->estadoMarital && !pConyuge->parejaAsignada){
                         p->conyuge = pConyuge;
                         pConyuge->conyuge = p;
                         p->parejaAsignada = true;
@@ -161,12 +178,12 @@ Lista * Mundo::generateCountryVisits(){
     } else{
         cantPaises = rand()%11 + 25;
     }
-    cout << cantPaises << endl;//borrar
+    //cout << cantPaises << endl;//borrar
     return NULL;
 }
 
 Lista * Mundo::generateSports(Persona *p){
-    cout<< p->ejercicio << endl;//borrar
+    //cout<< p->ejercicio << endl;//borrar
     return NULL;
 }
 
@@ -199,8 +216,8 @@ void Mundo::generateKids(Persona *p){
     }
 }
 
-void Mundo::createBirthdates(){
-    NodoPersona * tmp = listaPersonas->primerNodo;
+void Mundo::createBirthdates(ListaPersonas * lista){
+    NodoPersona * tmp = lista->primerNodo;
     while (tmp != NULL){
         Persona * p = tmp->persona;
         p->fechaNacimiento = rand() % 81 + 1940;
@@ -216,23 +233,23 @@ void Mundo::createBirthdates(){
         } else{
             p->diaNacimiento  = rand() % 31 + 1;
         }
-        //añadir edad
+        p->generateAge(year, mes, dia);
         p->assignAgeGroup();
         tmp = tmp->siguiente;
     }
 }
 
 
-void Mundo::increaseSins(){
-    NodoPersona * tmp = listaPersonas->primerNodo;
+void Mundo::increaseSins(ListaPersonas * lista){
+    NodoPersona * tmp = lista->primerNodo;
     while(tmp != NULL){
         tmp->persona->increaseSins();
         tmp = tmp->siguiente;
     }
 }
 
-void Mundo::increaseGoodActions(){
-    NodoPersona * tmp = listaPersonas->primerNodo;
+void Mundo::increaseGoodActions(ListaPersonas * lista){
+    NodoPersona * tmp = lista->primerNodo;
     while(tmp != NULL){
         tmp->persona->increaseGoodActions();
         tmp = tmp->siguiente;
@@ -381,6 +398,44 @@ void Mundo::stats(){
     cout << "Personas Muertas: " << muertos << endl;
     cout << "Personas salvadas: " << salvados << endl;
 }
+
+
+
+
+void Mundo::CorvusGlaive(){
+    int n = 5 * listaPersonas->size() / 100;
+    ListaPersonasRestringida * lista = new ListaPersonasRestringida(n);
+    NodoPersona * nodo = listaPersonas->primerNodo;
+    while (nodo != NULL){
+        lista->insertSortMax(nodo->persona);
+        nodo = nodo->siguiente;
+    }
+
+    nodo = lista->primerNodo;
+    while(nodo != NULL){
+        nodo->persona->CorvusGlaive();
+        nodo = nodo->siguiente;
+    }
+    delete lista;
+}
+
+void Mundo::Midnight(){
+    int n = 5 * listaPersonas->size() / 100;
+    ListaPersonasRestringida * lista = new ListaPersonasRestringida(n);
+    NodoPersona * nodo = listaPersonas->primerNodo;
+    while (nodo != NULL){
+        lista->insertSortMin(nodo->persona);
+        nodo = nodo->siguiente;
+    }
+
+    nodo = lista->primerNodo;
+    while(nodo != NULL){
+        nodo->persona->Midnight();
+        nodo = nodo->siguiente;
+    }
+    delete lista;
+}
+
 
 void Mundo::Ironman(){
     ListaPersonas * lista = arbol->toList();

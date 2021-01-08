@@ -56,5 +56,6 @@ void ListaAcciones::printList(){
         } else{
             cout << ", ";
         }
+        tmp = tmp->siguiente;
     }
 }
