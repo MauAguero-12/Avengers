@@ -9,33 +9,38 @@ void Mundo::generateHumans(int cant){
     ListaPersonas * lista = new ListaPersonas();
     for (int i = 0; i < cant; i++){
         Persona * p = new Persona(generateID());
-        p->nombre = generateName();
-        p->apellido = generateSurname();
+
         p->genero = generateGender();
+        if (p->genero == "Hombre"){
+            p->nombre = generateMaleName();
+        } else{
+            p->nombre = generateFemaleName();
+        }
+        p->apellido = generateSurname();
         p->pais = generateCountry();
         p->continente = generateContinent();
-        //p->paises = generateCountryVisits();
+        generateCountryVisits(p);
         p->estadoMarital = generateMaritalState(p);
         p->ejercicio = rand() % 8;
-        //p->deportes = generateSports(p);
+        p->deportes = generateSports(p);
         p->religion = generateReligion();
         p->profesion = generateJob();
         lista->insert(p);
     }
-    cout << "PRIMERA PARTE" << endl;
+    //cout << "PRIMERA PARTE" << endl;
 
     createBirthdates(lista);
     increaseGoodActions(lista);
     increaseSins(lista);
 
-    cout << "SEGUNDA PARTE" << endl;
+    //cout << "SEGUNDA PARTE" << endl;
 
     for (int i = 0; i < cant; i++){
         Persona * p = lista->returnIndex(i)->persona;
         listaPersonas->insertSort(p);
     }
 
-    cout << "TERCERA PARTE" << endl;
+    //cout << "TERCERA PARTE" << endl;
 
     for (int i = 0; i < cant; i++){
         Persona * p = lista->returnIndex(i)->persona;
@@ -44,7 +49,7 @@ void Mundo::generateHumans(int cant){
 
     }
 
-    cout << "CUARTA PARTE" << endl;
+    //cout << "CUARTA PARTE" << endl;
 
     for (int i = 0; i < cant; i++){
         Persona * p = lista->returnIndex(i)->persona;
@@ -52,7 +57,7 @@ void Mundo::generateHumans(int cant){
     }
 
     delete lista;
-    cout << "QUINTA PARTE" << endl;
+    //cout << "QUINTA PARTE" << endl;
 
 }
 
@@ -72,12 +77,52 @@ int Mundo::generateID(){
     return id;
 }
 
-string Mundo::generateName(){
-    return "nombre";
+string Mundo::generateMaleName(){
+    ifstream archivo_nombre("/Users/mam12/Downloads/Avengers/Avengers/Nombres-Hombre.txt");
+    string linea;
+
+    int contador = 0;
+    int max = rand()%51;
+
+    while(getline(archivo_nombre, linea)){
+        if(max == contador){
+            break;
+        }
+        contador++;
+    }
+    return linea;
+}
+
+string Mundo::generateFemaleName(){
+    ifstream archivo_nombre("/Users/mam12/Downloads/Avengers/Avengers/Nombres-Mujeres.txt");
+    string linea;
+
+    int contador = 0;
+    int max = rand()%51;
+
+    while(getline(archivo_nombre, linea)){
+        if(max == contador) {
+            break;
+        }
+        contador++;
+    }
+    return linea;
 }
 
 string Mundo::generateSurname(){
-    return "apellido";
+    ifstream archivo_nombre("/Users/mam12/Downloads/Avengers/Avengers/Apellidos.txt");
+    string linea;
+
+    int contador = 0;
+    int max = rand()%91;
+
+    while(getline(archivo_nombre, linea)){
+        if(max == contador){
+            break;
+        }
+        contador++;
+    }
+    return linea;
 }
 
 string Mundo::generateGender(){
@@ -88,20 +133,84 @@ string Mundo::generateGender(){
         return "Mujer";
 }
 
-string Mundo::generateCountry(){
-    return "pais";
+string  Mundo::generateCountry(){
+    ifstream archivo_nombre("/Users/mam12/Downloads/Avengers/Avengers/Paises.txt");
+    string linea;
+
+    int contador = 0;
+    int max = rand()%180;
+
+    while(getline(archivo_nombre, linea)){
+        if(max == contador){
+            break;
+        }
+        contador++;
+    }
+    return linea;
 }
 
 string Mundo::generateContinent(){
-    return "continente";
+    ifstream archivo_nombre("/Users/mam12/Downloads/Avengers/Avengers/Continentes.txt");
+    string linea;
+
+    int contador = 0;
+    int max = rand()%8;
+
+    while(getline(archivo_nombre, linea)){
+        if(max == contador){
+            break;
+        }
+        contador++;
+    }
+    return linea;
 }
 
 string Mundo::generateReligion(){
-    return "religion";
+    ifstream archivo_nombre("/Users/mam12/Downloads/Avengers/Avengers/Religiones.txt");
+    string linea;
+
+    int contador = 0;
+    int max = rand()%16;
+
+    while(getline(archivo_nombre, linea)){
+        if(max == contador){
+            break;
+        }
+        contador++;
+    }
+    return linea;
 }
 
 string Mundo::generateJob(){
-    return "trabajo";
+    ifstream archivo_nombre("/Users/mam12/Downloads/Avengers/Avengers/Trabajos.txt");
+    string linea;
+
+    int contador = 0;
+    int max = rand()%71;
+
+    while(getline(archivo_nombre, linea)){
+        if(max == contador){
+            break;
+        }
+        contador++;
+    }
+    return linea;
+}
+
+string Mundo::generateSport(){
+    ifstream archivo_nombre("/Users/mam12/Downloads/Avengers/Avengers/Deportes.txt");
+    string linea;
+
+    int contador = 0;
+    int max = rand()%26;
+
+    while(getline(archivo_nombre, linea)){
+        if(max == contador){
+            break;
+        }
+        contador++;
+    }
+    return linea;
 }
 
 void Mundo::generateFriends(Persona * p){
@@ -164,7 +273,7 @@ void Mundo::generateCouple(Persona *p){
     }
 }
 
-Lista * Mundo::generateCountryVisits(){
+void Mundo::generateCountryVisits(Persona *p){
     int cantPaises;
     int n = rand()%100;
     if (n < 30){
@@ -178,13 +287,29 @@ Lista * Mundo::generateCountryVisits(){
     } else{
         cantPaises = rand()%11 + 25;
     }
-    //cout << cantPaises << endl;//borrar
-    return NULL;
+
+    Lista * l = new Lista();
+    while (cantPaises != 0){
+        string pais = generateCountry();
+        if (pais != p->pais && !l->isInList(pais)){
+            cantPaises--;
+            l->insert(pais);
+        }
+    }
+    p->paises = l;
 }
 
 Lista * Mundo::generateSports(Persona *p){
-    //cout<< p->ejercicio << endl;//borrar
-    return NULL;
+    int deportes = p->ejercicio;
+    Lista * l = new Lista();
+    while (deportes != 0){
+        string deporte = generateSport();
+        if (!l->isInList(deporte)){
+            deportes--;
+            l->insert(deporte);
+        }
+    }
+    return l;
 }
 
 void Mundo::generateKids(Persona *p){
@@ -257,7 +382,7 @@ void Mundo::increaseGoodActions(ListaPersonas * lista){
 }
 
 Persona * Mundo::findHuman(int id){
-    NodoArbol * tmpA = arbol->raiz;
+    /*NodoArbol * tmpA = arbol->raiz;
     NodoPersona * persona = tmpA->persona;
 
     while (!tmpA->hoja()){
@@ -291,13 +416,26 @@ Persona * Mundo::findHuman(int id){
         return persona->persona;
     } else{
         return NULL;
+    }*/
+
+    NodoPersona * nodo = listaPersonas->primerNodo;
+    while (nodo != NULL){
+        if (nodo->persona->id == id){
+            return nodo->persona;
+        }
+        nodo = nodo->siguiente;
     }
+    return NULL;
 
 }
 
 void Mundo::printHuman(int id){
     Persona * p = findHuman(id);
-    p->printPerson();
+    if (p != NULL){
+        p->printPerson();
+    } else{
+        cout << "ESA PERSONA NO EXISTE" << endl;
+    }
 }
 
 void Mundo::printFamily(int id){
@@ -318,17 +456,23 @@ void Mundo::printFamily(int id){
 
 void Mundo::printFriendsOfFriends(int id){
     Persona * p = findHuman(id);
+
     if (p != NULL){
         ListaPersonas * lista = new ListaPersonas();
-        for (int i = 0; i < p->amigos->size(); i++){
-            NodoPersona * amigo = p->amigos->returnIndex(i);
+
+        NodoPersona * amigo = p->amigos->primerNodo;
+        while (amigo != NULL){
             ListaPersonas * amigosDeAmigo = amigo->persona->amigos;
-            for (int j = 0; amigosDeAmigo->size(); i++){
-                NodoPersona * amigoDeAmigo = amigosDeAmigo->returnIndex(j);
+
+            NodoPersona * amigoDeAmigo = amigosDeAmigo->primerNodo;
+            while (amigoDeAmigo != NULL){
                 lista->insert(amigoDeAmigo->persona);
+                amigoDeAmigo = amigoDeAmigo->siguiente;
             }
+            amigo = amigo->siguiente;
         }
 
+        cout << "SE HIZO LA LISTA" << endl;
         for(int i = 0; i < lista->size(); i++){
             lista->returnIndex(i)->persona->printPerson();
         }
@@ -340,9 +484,11 @@ void Mundo::printBySport(string deporte){
     while(nodo != NULL){
         if(nodo->persona->sport(deporte)){
             nodo->persona->printPerson();
+
         }
         nodo = nodo->siguiente;
     }
+    cout << "XD" << endl;
 }
 
 string Mundo::generateMaritalState(Persona *p){
@@ -393,6 +539,7 @@ void Mundo::stats(){
         } else{
             muertos++;
         }
+        nodo = nodo->siguiente;
     }
     cout << "Personas Vivas: " << vivos << endl;
     cout << "Personas Muertas: " << muertos << endl;

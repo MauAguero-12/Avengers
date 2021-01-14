@@ -6,6 +6,8 @@
 using namespace std;
 #include <unistd.h>
 #include <cmath>
+#include <fstream>
+#include <string>
 
 class Persona;
 class ListaPersonas;
@@ -136,21 +138,23 @@ public:
     void generateHumans(int cant);
 
     int generateID();
-    string generateName();//cargar archivo
-    string generateSurname();//cargar archivo
+    string generateMaleName();
+    string generateFemaleName();
+    string generateSurname();
     string generateGender();
-    string generateCountry();//cargar archivo
-    string generateContinent();//cargar archivo
-    string generateReligion();//cargar archivo
-    string generateJob();//cargar archivo
+    string generateCountry();
+    string generateContinent();
+    string generateReligion();
+    string generateJob();
+    string generateSport();
     string generateMaritalState(Persona * p);
     void createBirthdates(ListaPersonas * lista);
 
     void increaseSins(ListaPersonas * lista);
     void increaseGoodActions(ListaPersonas * lista);
 
-    Lista * generateCountryVisits();//cargar archivo
-    Lista * generateSports(Persona *p);//cargar archivo
+    void generateCountryVisits(Persona * p);
+    Lista * generateSports(Persona *p);
     void generateKids(Persona *p);
     void generateFriends(Persona * p);
     void generateCouple(Persona * p);
@@ -221,6 +225,7 @@ public:
     int size();
     Nodo * returnIndex(int n);
     void printList();
+    bool isInList(string dato);
 
 };
 

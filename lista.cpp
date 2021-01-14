@@ -60,5 +60,19 @@ void Lista::printList(){
         } else{
             cout << " | ";
         }
+        nodo = nodo->siguiente;
     }
+}
+
+bool Lista::isInList(string dato){
+    Nodo * nodo = primerNodo;
+
+    while (nodo != NULL){
+        if (nodo->dato == dato){
+            return true;
+        } else{
+            nodo = nodo->siguiente;
+        }
+    }
+    return false;
 }

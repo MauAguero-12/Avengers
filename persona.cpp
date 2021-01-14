@@ -78,6 +78,8 @@ void Persona::printPerson(){
     cout << "Grupo Etario: " << grupoEtario << endl;
     cout << "Genero: " << genero << endl;
     cout << "Estado Civil: " << estadoMarital << endl;
+    cout << "Trabajo: " << profesion << endl;
+    cout << "Religion: " << religion << endl;
     if (vivo)
         cout << "Estado: VIVO" << endl;
     else
